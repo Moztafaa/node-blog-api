@@ -3,13 +3,16 @@ import {
   getAllUserCtrl,
   getUserProfileCtrl,
   getUsersCount,
+  profilePhotoUploadCtrl,
   updateUserProfileCtrl,
 } from '../controllers/userController.ts'
+import { photoUpload } from '../middleware/photoUpload.ts'
+import validateObjectId from '../middleware/validateObjectId.ts'
 import {
+  verifyToken,
   verifyTokenAndAdmin,
   verifyTokenAndOnlyUser,
 } from '../middleware/verifyToken.ts'
-import validateObjectId from '../middleware/validateObjectId.ts'
 
 const router = Router()
 
@@ -23,6 +26,14 @@ router.put(
   validateObjectId,
   verifyTokenAndOnlyUser,
   updateUserProfileCtrl,
+)
+
+// /api/users/profile/profile-photo-upload
+router.post(
+  '/profile/profile-photo-upload',
+  verifyToken,
+  photoUpload.single('image'),
+  profilePhotoUploadCtrl,
 )
 
 // /api/users/count

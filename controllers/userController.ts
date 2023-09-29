@@ -1,7 +1,8 @@
+import bcrypt from 'bcryptjs'
+import { Request, RequestHandler, Response } from 'express'
 import asyncHandler from 'express-async-handler'
 import { User, validateUpdateUser } from '../models/User.ts'
-import { Request, Response } from 'express'
-import bcrypt from 'bcryptjs'
+
 /**
  * @description Get all users
  * @route GET /api/users
@@ -29,13 +30,11 @@ export const getUserProfileCtrl = asyncHandler(
     res.status(200).json(user)
   },
 )
-
 /**
  * @description Update user profile
  * @route PUT /api/users/:id
  * @access Private
  */
-
 export const updateUserProfileCtrl = asyncHandler(
   async (req: Request, res: Response): Promise<any> => {
     const { error } = validateUpdateUser(req.body)
@@ -46,9 +45,7 @@ export const updateUserProfileCtrl = asyncHandler(
       const salt = await bcrypt.genSalt(10)
       req.body.password = await bcrypt.hash(req.body.password, salt)
     }
-
     const updatedUser = await User.findByIdAndUpdate(
-      // @ts-ignore
       req.params.id,
       {
         $set: {
@@ -62,16 +59,31 @@ export const updateUserProfileCtrl = asyncHandler(
     res.status(200).json(updatedUser)
   },
 )
-
 /**
- * @description Get Users Cound
+ * @description Get Users Count
  * @route GET /api/users
  * @access Private
  */
-export const getUsersCount = asyncHandler(
+export const getUsersCount: RequestHandler = asyncHandler(
   async (req: Request, res: Response): Promise<any> => {
     // @ts-ignore
     const count = await User.count()
     res.status(200).json(count)
+  },
+)
+/**
+ * @description Upload User Profile Photo
+ * @route PUT /api/users/profile/profile-photo-upload
+ * @access Private
+ */
+
+export const profilePhotoUploadCtrl: RequestHandler = asyncHandler(
+  async (req: Request, res: Response): Promise<any> => {
+    if (!req.file) {
+      return res.status(400).json({
+        message: 'Please upload a file',
+      })
+    }
+    res.status(200).json({ message: 'profile photo uploaded' })
   },
 )
