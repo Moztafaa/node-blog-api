@@ -1,5 +1,6 @@
 import Router from 'express'
 import {
+  deleteUserProfileCtrl,
   getAllUserCtrl,
   getUserProfileCtrl,
   getUsersCount,
@@ -11,6 +12,7 @@ import validateObjectId from '../middleware/validateObjectId.ts'
 import {
   verifyToken,
   verifyTokenAndAdmin,
+  verifyTokenAndAuthorization,
   verifyTokenAndOnlyUser,
 } from '../middleware/verifyToken.ts'
 
@@ -25,7 +27,13 @@ router.put(
   '/profile/:id',
   validateObjectId,
   verifyTokenAndOnlyUser,
-  updateUserProfileCtrl,
+  updateUserProfileCtrl
+)
+router.delete(
+  '/profile/:id',
+  validateObjectId,
+  verifyTokenAndAuthorization,
+  deleteUserProfileCtrl
 )
 
 // /api/users/profile/profile-photo-upload
@@ -33,7 +41,7 @@ router.post(
   '/profile/profile-photo-upload',
   verifyToken,
   photoUpload.single('image'),
-  profilePhotoUploadCtrl,
+  profilePhotoUploadCtrl
 )
 
 // /api/users/count
