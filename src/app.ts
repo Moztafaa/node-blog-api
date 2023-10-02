@@ -10,7 +10,6 @@ import { router as commentRouter } from './routes/commentRoute'
 import { postRouter } from './routes/postRoute'
 import { userRouter } from './routes/userRoute'
 dotenv.config()
-
 //connect to db
 db()
 
