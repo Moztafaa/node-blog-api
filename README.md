@@ -38,13 +38,21 @@ Follow these steps to get the Node Blog API up and running on your local machine
    npm run build && npm run start
    ```
 
-## Usage
+## Deployment
+
+The Node Blog API is deployed on Render at the following URL:
+
+https://node-blog-api-ihsp.onrender.com
+
+You can use this URL to access the API and test its functionality.
 
 ## API Documentation
 
 This project includes a Postman collection that can be used to test the API endpoints. The collection includes examples of how to use each endpoint and the expected response.
 
 [View Postman Collection](https://documenter.getpostman.com/view/28126411/2s9YJc2Nec)
+
+## Usage
 
 To use the Node Blog API, follow these steps:
 
