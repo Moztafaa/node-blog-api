@@ -75,6 +75,6 @@ This project is licensed under the MIT License.
 
 ## Contact Information
 
-For any inquiries or feedback, please contact [Mostafa Ibrahim](imoztafa@gmail.com).
+For any inquiries or feedback, please contact (imoztafa@gmail.com).
 
 ---
