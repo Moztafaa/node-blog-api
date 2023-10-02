@@ -35,7 +35,7 @@ Follow these steps to get the Node Blog API up and running on your local machine
 4. Start the server:
 
    ```bash
-   npm run start
+   npm run build && npm run start
    ```
 
 ## Usage

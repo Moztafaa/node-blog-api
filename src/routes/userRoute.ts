@@ -6,15 +6,15 @@ import {
   getUsersCount,
   profilePhotoUploadCtrl,
   updateUserProfileCtrl,
-} from '../controllers/userController.ts'
-import { photoUpload } from '../middleware/photoUpload.ts'
-import validateObjectId from '../middleware/validateObjectId.ts'
+} from '../controllers/userController'
+import { photoUpload } from '../middleware/photoUpload'
+import validateObjectId from '../middleware/validateObjectId'
 import {
   verifyToken,
   verifyTokenAndAdmin,
   verifyTokenAndAuthorization,
   verifyTokenAndOnlyUser,
-} from '../middleware/verifyToken.ts'
+} from '../middleware/verifyToken'
 
 const router = Router()
 

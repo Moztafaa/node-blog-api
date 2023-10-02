@@ -1,17 +1,12 @@
 {
   "compilerOptions": {
-    "noImplicitAny": false,
     "sourceMap": true,
-    "outDir": "dist",
-    "rootDir": "./",
+    "outDir": "./dist",
+    "rootDir": "./src",
     "strict": false,
     "lib": ["esnext"],
     "esModuleInterop": true,
-    "declaration": true,
-    "allowImportingTsExtensions": true,
-    "noEmit": true,
-    "skipLibCheck": true
+    "declaration": true
   },
-  "include": ["**/*.ts"],
-  // "exclude": ["node_modules"]
+  "include": ["src/**/*.ts"]
 }

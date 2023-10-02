@@ -1,6 +1,6 @@
 import express from 'express'
 
-import {loginUserCtrl, registerUserCtrl} from '../controllers/authController.ts'
+import {loginUserCtrl, registerUserCtrl} from '../controllers/authController'
 
 const router = express.Router()
 // /api/auth/register

@@ -3,14 +3,14 @@ import { Request, RequestHandler, Response } from 'express'
 import asyncHandler from 'express-async-handler'
 import fs from 'fs'
 import path from 'path'
-import { Comment } from '../models/Comment.ts'
-import { Post } from '../models/Post.ts'
-import { User, validateUpdateUser } from '../models/User.ts'
-import { cloudinaryRemoveMultipleImage } from '../utils/cloudinary'
+import { Comment } from '../models/Comment'
+import { Post } from '../models/Post'
+import { User, validateUpdateUser } from '../models/User'
 import {
   cloudinaryRemoveImage,
+  cloudinaryRemoveMultipleImage,
   cloudinaryUploadImage,
-} from '../utils/cloudinary.ts'
+} from '../utils/cloudinary'
 /**
  * @description Get all users
  * @route GET /api/users
