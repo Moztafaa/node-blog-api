@@ -40,6 +40,12 @@ Follow these steps to get the Node Blog API up and running on your local machine
 
 ## Usage
 
+## API Documentation
+
+This project includes a Postman collection that can be used to test the API endpoints. The collection includes examples of how to use each endpoint and the expected response.
+
+[View Postman Collection](https://documenter.getpostman.com/view/28126411/2s9YJc2Nec)
+
 To use the Node Blog API, follow these steps:
 
 1. Open your web browser and navigate to `http://localhost:8000`.
