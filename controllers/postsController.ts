@@ -3,6 +3,7 @@ import asyncHandler from 'express-async-handler'
 import { RequestHandler } from 'express-serve-static-core'
 import fs from 'fs'
 import path from 'path'
+import { Comment } from '../models/Comment'
 import { Post, validateCreatePost, validateUpdatePost } from '../models/Post'
 import {
   cloudinaryRemoveImage,
@@ -100,9 +101,9 @@ export const getAllPostCtrl: RequestHandler = asyncHandler(
 
 export const getSinglePostCtrl: RequestHandler = asyncHandler(
   async (req: Request, res: Response): Promise<any> => {
-    const post = await Post.findById(req.params.id).populate('user', [
-      '-password',
-    ])
+    const post = await Post.findById(req.params.id)
+      .populate('user', ['-password'])
+      .populate('comments')
     if (!post) {
       return res.status(404).json({
         message: 'post not found',
@@ -144,7 +145,9 @@ export const deletePostCtrl: RequestHandler = asyncHandler(
       await Post.findByIdAndDelete(req.params.id)
       await cloudinaryRemoveImage(post.image.publicId)
 
-      // @TODO - delete all comments related to this post
+      // delete all comments related to this post
+      await Comment.deleteMany({ postId: post._id })
+
       return res.status(200).json({
         message: 'post deleted',
         postID: post._id,
@@ -250,12 +253,47 @@ export const updatePostImageCtrl = asyncHandler(
         },
       },
       { new: true }
-    ).populate('user', ['-password'])
+    )
 
     // 7. Send response
     res.status(200).json(updatedPost)
 
     // 8. delete image from the server
     fs.unlinkSync(imagePath)
+  }
+)
+
+/**
+ * @description Toggle Like Post
+ * @route PUT /api/posts/like/:id
+ * @access Private
+ */
+export const toggleLikePostCtrl = asyncHandler(
+  async (req: Request, res: Response): Promise<any> => {
+    // 1. Get the post from DB
+    const post = await Post.findById(req.params.id)
+    if (!post) {
+      return res.status(404).json({
+        message: 'post not found',
+      })
+    }
+    // 2. Check if the user already liked this post
+    // @ts-ignore
+    const isLiked = post.likes.includes(req.user.id)
+    if (isLiked) {
+      // 3. If yes, unlike it
+      // @ts-ignore
+      await post.updateOne({ $pull: { likes: req.user.id } })
+      res.status(200).json({
+        message: 'post unliked',
+      })
+    } else {
+      // 4. If no, like it
+      // @ts-ignore
+      await post.updateOne({ $push: { likes: req.user.id } })
+      res.status(200).json({
+        message: 'post liked',
+      })
+    }
   }
 )

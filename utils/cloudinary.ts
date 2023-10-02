@@ -27,10 +27,19 @@ export const cloudinaryUploadImage = async (fileToUpload: string) => {
  * @returns Promise<void> Resolves when the image is successfully deleted, or rejects with an error message
  */
 export const cloudinaryRemoveImage = async (
-  imagePublicId: string,
+  imagePublicId: string
 ): Promise<void> => {
   try {
     return await cloudinary.v2.uploader.destroy(imagePublicId)
+  } catch (error) {
+    throw error
+  }
+}
+export const cloudinaryRemoveMultipleImage = async (
+  publicIds: string[]
+): Promise<void> => {
+  try {
+    return await cloudinary.v2.api.delete_resources(publicIds)
   } catch (error) {
     throw error
   }

@@ -1,7 +1,7 @@
-import mongoose from 'mongoose'
 import Joi from 'joi'
 import passwordComplexity from 'joi-password-complexity'
 import jwt from 'jsonwebtoken'
+import mongoose from 'mongoose'
 
 const UserSchema = new mongoose.Schema(
   {
@@ -45,15 +45,23 @@ const UserSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  },
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
 )
+// Populate posts when user is fetched
+UserSchema.virtual('posts', {
+  ref: 'Post',
+  foreignField: 'user',
+  localField: '_id',
+})
 
 // Generate Auth Token
 UserSchema.methods.generateAuthToken = function () {
   return jwt.sign(
     { id: this._id, isAdmin: this.isAdmin },
     // @ts-ignore
-    process.env.JWT_SECRET,
+    process.env.JWT_SECRET
   )
 }
 export const User = mongoose.model('User', UserSchema)

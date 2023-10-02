@@ -5,6 +5,7 @@ import {
   getAllPostCtrl,
   getPostCountCtrl,
   getSinglePostCtrl,
+  toggleLikePostCtrl,
   updatePostCtrl,
   updatePostImageCtrl,
 } from '../controllers/postsController'
@@ -31,4 +32,7 @@ router.put(
   photoUpload.single('image'),
   updatePostImageCtrl
 )
+
+// /api/posts/like/:id
+router.put('/like/:id', validateObjectId, verifyToken, toggleLikePostCtrl)
 export { router as postRouter }

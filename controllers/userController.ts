@@ -3,7 +3,10 @@ import { Request, RequestHandler, Response } from 'express'
 import asyncHandler from 'express-async-handler'
 import fs from 'fs'
 import path from 'path'
+import { Comment } from '../models/Comment.ts'
+import { Post } from '../models/Post.ts'
 import { User, validateUpdateUser } from '../models/User.ts'
+import { cloudinaryRemoveMultipleImage } from '../utils/cloudinary'
 import {
   cloudinaryRemoveImage,
   cloudinaryUploadImage,
@@ -16,7 +19,7 @@ import {
 export const getAllUserCtrl = asyncHandler(
   async (req: Request, res: Response): Promise<any> => {
     // @ts-ignore
-    const users = await User.find().select('-password')
+    const users = await User.find().select('-password').populate('posts')
     res.status(200).json(users)
   }
 )
@@ -28,7 +31,9 @@ export const getAllUserCtrl = asyncHandler(
 export const getUserProfileCtrl = asyncHandler(
   async (req: Request, res: Response): Promise<any> => {
     // @ts-ignore
-    const user = await User.findById(req.params.id).select('-password')
+    const user = await User.findById(req.params.id)
+      .select('-password')
+      .populate('posts')
     if (!user) {
       return res.status(404).json({ message: 'User not found' })
     }
@@ -135,15 +140,24 @@ export const deleteUserProfileCtrl: RequestHandler = asyncHandler(
       return res.status(404).json({ message: 'User not found' })
     }
 
-    // 2. @TODO - Get all posts from DB
-    // 3. @TODO - Get the public ids from the posts
-    // 4. @TODO - Delete all posts image from the cloudinary belongs to the user
+    // 2. Get all posts from DB
+    const posts = await Post.find({ user: user._id })
+
+    // 3. Get the public ids from the posts
+    const publicIds = posts.map((post) => post.image.publicId)
+
+    // 4. Delete all posts image from the cloudinary belongs to the user
+    if (publicIds?.length > 0) {
+      await cloudinaryRemoveMultipleImage(publicIds)
+    }
 
     // 5. Delete the profile photo from cloudinary
     if (user.profilePhoto.public_Id !== null) {
       await cloudinaryRemoveImage(user?.profilePhoto.publicId)
     }
-    // 6. @TODO - Delete user posts & comments from DB
+    // 6. Delete user posts & comments from DB
+    await Post.deleteMany({ user: user._id })
+    await Comment.deleteMany({ user: user._id })
 
     // 7. Delete user from DB
     // @ts-ignore

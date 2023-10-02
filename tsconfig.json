@@ -3,11 +3,15 @@
     "noImplicitAny": false,
     "sourceMap": true,
     "outDir": "dist",
-    "strict": true,
+    "rootDir": "./",
+    "strict": false,
     "lib": ["esnext"],
     "esModuleInterop": true,
+    "declaration": true,
     "allowImportingTsExtensions": true,
     "noEmit": true,
     "skipLibCheck": true
-  }
+  },
+  "include": ["**/*.ts"],
+  // "exclude": ["node_modules"]
 }
